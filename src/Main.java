@@ -10,11 +10,10 @@ public class Main {
         String input = scanner.next();
         checkSum checkSum = new checkSum();
         boolean tf = checkSum.checkInput(input);
-        String inputs = checkSum.multi4correction(input);
-        char array [] = checkSum.toArray(inputs);
-        System.out.print(tf + inputs);
-        for(int i = 0; i < array.length;i++){
-            System.out.print(array[i]+"\n");
+        char [] inputs = checkSum.multi4correction(input);
+        System.out.print(tf+"\n");
+        for(int i = 0; i < inputs.length;i++){
+            System.out.print(inputs[i]+"\n");
         }
     }
 }
