@@ -103,9 +103,15 @@ public class checkSum {
         int answer = 0;
         int carryover = 0;
         for(int i = 0; i < array.length; i++){
-            answer += Character.getNumericValue(array[i]) + remainder;
+            answer += Character.getNumericValue(array[i]);
         }
+        answer =+ remainder;
+
         if(answer == 0){
+            finalanswer[0] = answer;
+            finalanswer[1] = carryover;
+        }
+        if(answer == 1){
             finalanswer[0] = answer;
             finalanswer[1] = carryover;
         }
@@ -115,9 +121,11 @@ public class checkSum {
             finalanswer[1] = carryover;
 
         }
-        if(answer%2 == 1){
+        if(answer%2 == 1 && answer != 1){
             answer = 1;
-
+            carryover = 1;
+            finalanswer[0] = answer;
+            finalanswer[1] = carryover;
         }
     }
 
