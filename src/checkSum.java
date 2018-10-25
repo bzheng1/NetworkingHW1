@@ -1,11 +1,9 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.toDegrees;
 import static sun.security.krb5.internal.LoginOptions.MAX;
 
 /**
@@ -18,33 +16,39 @@ public class checkSum {
     private ServerSocket servsock = null;
     private DataInputStream dis = null;
     private DataOutputStream dos = null;
-    public boolean checkInput(String input) {
-        char[] inputArray = input.toCharArray();
+    public String[] checkInput(String input) {
+        String[] inputArray = input.split("");
             for (int i = 0; i < inputArray.length; i++) {
-                if (inputArray[i] == '0' || inputArray[i] == '1') {
+                if (inputArray[i] == "0" || inputArray[i] == "1") {
                     //if 0 or 1 then return true.
-                } else if (inputArray[i] != '0' && inputArray[i] != '1') {
+                } else if (inputArray[i] != "0" && inputArray[i] != "1") {
                     //if not 0 or 1 return false.
-                    return false;
+                    return null;
                 }
-            }return true;
+            }return inputArray;
     }
 
-    public char[] multi4correction(String input){
-        int stringLength = input.length();
-        int remainder = abs((stringLength % 4)-4);
-        if (remainder != 4){
-            remainder = stringLength + remainder;
-            System.out.print(padRightSpaces(input,remainder));
-            return padRightSpaces(input,remainder).toCharArray();
-        }return input.toCharArray();
+    public String[] multi4correction(String input) {
+        String[] inputArray = checkInput(input);
+        //check
+        if (inputArray != null) {
+            int stringLength = input.length();
+            int remainder = abs((stringLength % 4) - 4);
+            if (remainder != 4) {
+                remainder = stringLength + remainder;
+                System.out.print(padRightSpaces(input, remainder));
+                inputArray = padRightSpaces(input, remainder).split("");
+                return inputArray;
+            }
+        }return inputArray;
     }
+
 
     public static String padRightSpaces(String str, int n) {
-        return String.format("%1$-" + n +"s", str).replace(' ', '0');
+        return String.format("%1$-" + n +"s", str).replace(" ", "0");
     }
 
-    public char[] sortArray(char[] charArray){
+    public int[] sortArray(String[] charArray){
         char[] first = new char[MAX];
         char[] second = new char[MAX];
         char[] third = new char[MAX];
@@ -68,37 +72,29 @@ public class checkSum {
             thirdi++;
             fourthi++;
         }
-
+        int[] checkSumArray = addMe(first,second,third,fourth);
+        return checkSumArray;
     }
 
     public int[] addMe(char [] first, char[] second,char [] third, char [] fourth) {
-        int remainder = 0;
-        int[] results = new int[4];
-        for(int i = 0; i < first.length; i++){
-            results[0] += Character.getNumericValue(first[i]);
-            if(results[0] == 0){
-                results[0] = 0;
-            }
-            if(results[0]%2 == 0 && results[0] != 0){
-                results[0] = 0;
-                remainder = 1;
-            }
+        int[] finalResults = new int[4];
+        int[] carryOnResults = addLogic(first, 0);
+        finalResults[0] = carryOnResults[0];
+        carryOnResults = addLogic(second,carryOnResults[1]);
+        finalResults[1] = carryOnResults[0];
+        carryOnResults = addLogic(third,carryOnResults[1]);
+        finalResults[2] = carryOnResults[0];
+        carryOnResults = addLogic(fourth,carryOnResults[1]);
+        finalResults[3] = carryOnResults[0];
+
+        if(carryOnResults[1] == 1){
+            //addLogic(finalResults,1);
         }
-        for(int i = 0; i < second.length; i++){
-            results[0] += Character.getNumericValue(second[i]) + remainder;
-            if(results[0] == 0){
-                results[0] = 0;
-            }
-            if(results[0]%2 == 0 && results[0] != 0){
-                results[0] = 0;
-                remainder = 1;
-            }
-        }
-        return results;
+        return finalResults;
     }
 
 
-    public int[] addRest(char [] array, int remainder){
+    public int[] addLogic(char [] array, int remainder){
         int[] finalanswer = new int[2];
         int answer = 0;
         int carryover = 0;
@@ -126,7 +122,7 @@ public class checkSum {
             carryover = 1;
             finalanswer[0] = answer;
             finalanswer[1] = carryover;
-        }
+        }return finalanswer;
     }
 
 }
