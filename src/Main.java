@@ -6,11 +6,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.next();
-        checkSum checkSum = new checkSum();
-        String results;
-        results = checkSum.driver(input);
-        System.out.print(results);
-
+        String input = scanner.nextLine();
+        checkSumSender checkSumSender = new checkSumSender();
+        //System.out.print(input);
+        checkSumSender.driver(input);
     }
 }

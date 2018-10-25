@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
  * @author Bryan Zheng
  * @version 10/18/2018.
  */
-public class checkSum {
+public class checkSumSender {
 
     private Socket socket = null;
     private ServerSocket servsock = null;
@@ -19,12 +19,15 @@ public class checkSum {
     private DataOutputStream dos = null;
 
     public Boolean checkInput(String input) {
+        input = input.replaceAll("\\s+", "");
         boolean tf = input.matches("[01]+");
         return tf;
     }
 
     //puts string into String[]
     public String[] multi4correction(String input) {
+        input = input.replaceAll("\\s+", "");
+        //System.out.print(input);
         String[] inputArray = input.split("");
         //check
         int stringLength = input.length();
@@ -102,8 +105,6 @@ public class checkSum {
             answer += (array[i]);
         }
         answer += remainder;
-        System.out.print(answer);
-
         if(answer == 0){
             finalanswer[0] = answer;
             finalanswer[1] = carryover;
@@ -162,7 +163,9 @@ public class checkSum {
             return incorrect;
         }
         String[] foobar = multi4correction(input);
-        return msgtosend = Arrays.toString(sortArrayandAdd(foobar));
+        msgtosend = Arrays.toString(sortArrayandAdd(foobar));
+        System.out.print("Output: " +input + " " +  msgtosend);
+        return msgtosend;
     }
 }
 
