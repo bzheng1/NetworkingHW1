@@ -8,5 +8,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next();
         checkSum checkSum = new checkSum();
+        String results;
+        results = checkSum.driver(input);
+        System.out.print(results);
+
     }
 }
