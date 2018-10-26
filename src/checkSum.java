@@ -5,7 +5,7 @@ import static java.lang.Math.abs;
  * @author Bryan Zheng
  * @version 10/18/2018.
  */
-public class checkSumSender {
+public class checkSum {
 
 
     public Boolean checkInput(String input) {

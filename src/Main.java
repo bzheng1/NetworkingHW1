@@ -7,10 +7,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        checkSumSender checkSumSender = new checkSumSender();
+        String input = "1101011111";
+        String input2 = "10011";
+        checkSum checkSumSender = new checkSum();
+        CRC crc = new CRC();
 
-        checkSumSender.Checksum(input);
+        crc.CRC(input, input2);
+        //checkSumSender.Checksum(input);
 
 
 
