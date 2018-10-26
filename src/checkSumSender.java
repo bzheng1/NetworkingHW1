@@ -34,120 +34,41 @@ public class checkSumSender {
         return String.format("%1$-" + n +"s", str).replace(" ", "0");
     }
 
-    //prepares String[] to be added return checksum in int[]
-    public int[] sortArrayandAdd(String[] stringArray){
-        int length = stringArray.length;
-        int[] first = new int[length];
-        int[] second = new int[length];
-        int[] third = new int[length];
-        int[] fourth = new int[length];
-        int firsti = 0;
-        int secondi = 0;
-        int thirdi = 0;
-        int fourthi = 0;
 
-        for(int i = 0; i < stringArray.length; i++){
-            if(i%4 == 0){
-                first[firsti] = Integer.parseInt(stringArray[i]);
-                firsti++;
-            }if (i%4 == 1){
-                second[secondi] = Integer.parseInt(stringArray[i]);
-                secondi++;
-            }if (i%4 == 2){
-                third[thirdi] = Integer.parseInt(stringArray[i]);
-                thirdi++;
-            }if (i%4 == 3){
-                fourth[fourthi] = Integer.parseInt(stringArray[i]);
-                fourthi++;
+    public String getCheckSum(String [] array) {
+        int sum = 0;
+        for (int i = 0; i < array.length; i++) {
+            sum += Integer.parseInt(array[i], 2);
+        }
+        String results = Integer.toBinaryString(sum);
+
+        if (results.length() > 4) {
+            results = results.substring(1);
+            sum = Integer.parseInt(results, 2);
+            sum += 1;
+        }
+        results = Integer.toBinaryString(flipBits(sum,4));
+        if (results.length() < 4) {
+            results = String.format("%1$" + 4 + "s", results).replace(" ", "0");;
+        }
+        return results;
+    }
+
+        public int flipBits(int n, int k) {
+         int mask = (1 << k) - 1;
+        return n ^ mask;
+        }
+
+        public String Checksum (String input){
+            String checksum = getCheckSum(multi4correction(input));
+            if(checksum.equals("0000")){
+                System.out.print("There were no errors.\nOutput: ");
+            }else{
+                System.out.print("Output: ");
             }
-
+            System.out.print(input + " " + checksum);
+            return getCheckSum(multi4correction(input));
         }
-        int[] checkSumArray = addMe(first,second,third,fourth);
-        return checkSumArray;
     }
-
-    public int[] addMe(int [] first, int[] second,int [] third, int [] fourth) {
-        int[] finalResults = new int[4];
-        int[] carryOnResults = addLogic(fourth, 0);
-        finalResults[3] = carryOnResults[0];
-        carryOnResults = addLogic(third,carryOnResults[1]);
-        finalResults[2] = carryOnResults[0];
-        carryOnResults = addLogic(second,carryOnResults[1]);
-        finalResults[1] = carryOnResults[0];
-        carryOnResults = addLogic(first,carryOnResults[1]);
-        finalResults[0] = carryOnResults[0];
-
-        if(carryOnResults[1] == 1){
-            //finalResults = addleftover(finalResults);
-        }
-        return finalResults;
-        //return flipTheBits(finalResults);
-    }
-
-
-    public String addLogic(int [] array, int remainder){
-
-            
-            for(int i = 0; i <array.length; i++){
-
-            }
-
-            System.out.print(Integer.toBinaryString(sum));
-
-    }
-
-    public int[] addleftover(int[] leftover){
-        int remainder = 1;
-        int carryover = 0;
-        int[] finalchecksum = new int[4];
-        for(int i = 3; i > -1;i--){
-            finalchecksum[i]= leftover[i] + remainder + carryover;
-            remainder = 0;
-            if (finalchecksum[i] == 2){
-                finalchecksum[i] = 0;
-                carryover = 1;
-            }else if(finalchecksum[i] == 3){
-                finalchecksum[i] = 1;
-                carryover = 1;
-            }else if(finalchecksum[i]==1){
-                carryover = 0;
-            }
-        }return finalchecksum;
-    }
-
-    public int[] flipTheBits(int[] finalCheckSum){
-        for(int i = 0; i < finalCheckSum.length; i++){
-            if(finalCheckSum[i]==1){
-                finalCheckSum[i] = 0;
-            }else if(finalCheckSum[i]==0){
-                finalCheckSum[i] = 1;
-            }
-        }return finalCheckSum;
-    }
-    public int[] Checksum_Sender(String input) {
-        int r = 0;
-
-        if(checkInput(input)==false) {
-            String incorrect = "Not a binary String";
-        }
-        String[] foobar = multi4correction(input);
-        int[] checksumArray = sortArrayandAdd(foobar);
-        int[] data = new int[foobar.length+4];
-        for(int i = 0; i<foobar.length;i++){
-            data[i] = Integer.parseInt(foobar[i]);
-        }
-        for(int p = foobar.length; p < data.length; p++){
-            data[p] = checksumArray[r];
-            r++;
-        }
-        System.out.print("Output: ");
-        for(int q =0;q<data.length;q++){
-            System.out.print(data[q]);
-        }
-        return data;
-    }
-
-
-}
 
 
