@@ -1,9 +1,3 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Arrays;
-
 import static java.lang.Math.abs;
 
 
@@ -13,10 +7,6 @@ import static java.lang.Math.abs;
  */
 public class checkSumSender {
 
-    private Socket socket = null;
-    private ServerSocket servsock = null;
-    private DataInputStream dis = null;
-    private DataOutputStream dos = null;
 
     public Boolean checkInput(String input) {
         input = input.replaceAll("\\s+", "");
@@ -28,17 +18,14 @@ public class checkSumSender {
     public String[] multi4correction(String input) {
         input = input.replaceAll("\\s+", "");
         //System.out.print(input);
-        String[] inputArray = input.split("");
+        String[] inputArray = input.split("(?<=\\G....)");
         //check
         int stringLength = input.length();
         int remainder = abs((stringLength % 4) - 4);
         if (remainder != 4) {
             remainder = stringLength + remainder;
             //System.out.print(padRightSpaces(input, remainder));
-            inputArray = padRightSpaces(input, remainder).split("");
-//            for(int i = 0; i<inputArray.length;i++){
-//                System.out.print(inputArray[i]);
-//            }
+            inputArray = padRightSpaces(input, remainder).split("(?<=\\G....)");
         }return inputArray;
     }
 
@@ -47,7 +34,7 @@ public class checkSumSender {
         return String.format("%1$-" + n +"s", str).replace(" ", "0");
     }
 
-    //prepares String[] to be added
+    //prepares String[] to be added return checksum in int[]
     public int[] sortArrayandAdd(String[] stringArray){
         int length = stringArray.length;
         int[] first = new int[length];
@@ -91,41 +78,22 @@ public class checkSumSender {
         finalResults[0] = carryOnResults[0];
 
         if(carryOnResults[1] == 1){
-            finalResults = addleftover(finalResults);
+            //finalResults = addleftover(finalResults);
         }
-        return flipTheBits(finalResults);
+        return finalResults;
+        //return flipTheBits(finalResults);
     }
 
 
-    public int[] addLogic(int [] array, int remainder){
-        int[] finalanswer = new int[2];
-        int answer = 0;
-        int carryover = 0;
-        for(int i = 0; i < array.length; i++){
-            answer += (array[i]);
-        }
-        answer += remainder;
-        if(answer == 0){
-            finalanswer[0] = answer;
-            finalanswer[1] = carryover;
-        }
-        if(answer == 1){
-            finalanswer[0] = answer;
-            finalanswer[1] = carryover;
-        }
-        if(answer%2 == 0 && answer != 0){
-            answer = 0;
-            finalanswer[0] = answer;
-            carryover = 1;
-            finalanswer[1] = carryover;
+    public String addLogic(int [] array, int remainder){
 
-        }
-        if(answer%2 == 1 && answer != 1){
-            answer = 1;
-            carryover = 1;
-            finalanswer[0] = answer;
-            finalanswer[1] = carryover;
-        }return finalanswer;
+            
+            for(int i = 0; i <array.length; i++){
+
+            }
+
+            System.out.print(Integer.toBinaryString(sum));
+
     }
 
     public int[] addleftover(int[] leftover){
@@ -156,17 +124,30 @@ public class checkSumSender {
             }
         }return finalCheckSum;
     }
-    public String driver(String input){
-        String msgtosend;
+    public int[] Checksum_Sender(String input) {
+        int r = 0;
+
         if(checkInput(input)==false) {
             String incorrect = "Not a binary String";
-            return incorrect;
         }
         String[] foobar = multi4correction(input);
-        msgtosend = Arrays.toString(sortArrayandAdd(foobar));
-        System.out.print("Output: " +input + " " +  msgtosend);
-        return msgtosend;
+        int[] checksumArray = sortArrayandAdd(foobar);
+        int[] data = new int[foobar.length+4];
+        for(int i = 0; i<foobar.length;i++){
+            data[i] = Integer.parseInt(foobar[i]);
+        }
+        for(int p = foobar.length; p < data.length; p++){
+            data[p] = checksumArray[r];
+            r++;
+        }
+        System.out.print("Output: ");
+        for(int q =0;q<data.length;q++){
+            System.out.print(data[q]);
+        }
+        return data;
     }
+
+
 }
 
 
