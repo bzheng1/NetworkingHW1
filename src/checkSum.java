@@ -60,14 +60,16 @@ public class checkSum {
         }
 
         public String Checksum (String input){
-            String checksum = getCheckSum(multi4correction(input));
-            if(checksum.equals("0000")){
-                System.out.print("There were no errors.\nOutput: ");
-            }else{
-                System.out.print("Output: ");
-            }
-            System.out.print(input + " " + checksum);
-            return getCheckSum(multi4correction(input));
+            if(checkInput(input)==true){
+                String checksum = getCheckSum(multi4correction(input));
+                if(checksum.equals("0000")){
+                    System.out.print("There were no errors.\nOutput: ");
+                }else{
+                    System.out.print("Output: ");
+                }
+                System.out.print(input + " " + checksum);
+                return getCheckSum(multi4correction(input));
+            }else return null;
         }
     }
 
